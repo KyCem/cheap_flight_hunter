@@ -13,7 +13,7 @@ import constants
 options = Options()
 PROXY = "103.49.202.252:80"
 options.add_argument('--proxy-server=%s' % PROXY)
-driver = uc.Chrome()
+driver = webdriver.Chrome()
 
 def find_cheapest_flight(to_location_city, to_location,flightType, oneway_departure_date):
     flight_info = constants.generateFlightInfo(to_location_city, to_location, oneway_departure_date)
@@ -58,12 +58,12 @@ for location_data in constants.arrival_variant:
     print(location_data['city'] + " "+ location_data["city_code"])
     price_list_with_dates = []
     for i in range(len(date_variants)):
-        return_list = find_cheapest_flight(location_data['city'],location_data["city_code"],"arrival", date_variants[i])
-        if return_list is not None and len(return_list[0]) > 0 and float(return_list[0][0]) < 2.600 and return_list[0][0] is not None :
+        return_list = find_cheapest_flight(location_data['city'],location_data["city_code"],"departure", date_variants[i])
+        if return_list is not None and len(return_list[0]) > 0 and float(return_list[0][0]) < 3.000 and return_list[0][0] is not None :
             print(return_list[0][0] + "Uygun Fiyat")
             price_list_with_dates.append("date: " + date_variants[i] +" -> "+ "price: " + str(return_list[0]))
     #Sending the data to email
-    subject =  location_data['city'].upper() + " -> " + "ISTANBUL" 
+    subject =  "ISTANBUL" + " -> "  + location_data['city'].upper()
     body = str(price_list_with_dates)
     if len(price_list_with_dates) > 0: 
         email_sender.sendEmail(subject,body) 
